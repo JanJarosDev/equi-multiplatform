@@ -1,0 +1,28 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+permissions: write-all
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: AI Code Review
+        uses: lfsevergnini/ai-code-reviewer@v2.2.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+          AI_PROVIDER: "openai"
+          AI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AI_MODEL: "gpt-4o-mini"
+          AI_TEMPERATURE: 0.3
+
+          APPROVE_REVIEWS: true
+          MAX_COMMENTS: 0
+          PROJECT_CONTEXT: "This is a Node.js TypeScript project"
+          CONTEXT_FILES: "package.json,README.md"
+          EXCLUDE_PATTERNS: "**/*.lock,**/*.json,**/*.md"
